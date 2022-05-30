@@ -36,7 +36,7 @@ const winConditions: winCondition[] = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
-  // top-down
+  // top-to-bottom
   [0, 3, 6],
   [1, 4, 7],
   [2, 5, 8],
@@ -70,16 +70,16 @@ export const getStateOfBoard = (board: string): string => {
   // E.g. don't get to the expensive validation until we do the cheap validation
   if (!board || !board.length)
     return renderResult(board, BoardState.INVALID_GAME);
-  if (board.length > 9) return renderResult(board, BoardState.INVALID_GAME);
-  // I have made the assumption that the board needs to at least supply _ for empty spaces else we can't trust it
   if (board.length !== 9) return renderResult(board, BoardState.INVALID_GAME);
 
   // Ensure we have predictable data from here
   // From this point onwards I don't want to need to do .toUpperCase() on all string checks
   board = board.toUpperCase();
+  // I have made the assumption that the board needs to at least supply _ for empty spaces else we can't trust it
   // Ensure we only have X, O and _ in our board
   if ((board.match(/[^XO_]/g) || []).length)
     return renderResult(board, BoardState.INVALID_GAME);
+  
   const noughtsCount = (board.match(/O/g) || []).length;
   const crossesCount = (board.match(/X/g) || []).length;
   const blanksCount = (board.match(/_/g) || []).length;
