@@ -1,42 +1,85 @@
-import { Delays, greeter } from '../src/main.js';
+import { BoardState, getStateOfBoard } from '../src/main.js';
 
-describe('greeter function', () => {
-  const name = 'John';
-  let hello: string;
+// Collection of test boards
+const boards = {
+  blank: '',
+  badFormat: 'badformat',
+  tooShort: 'XOX',
+  tooLong: 'XOXOOXXOXO',
+  noughtsFirst: 'OOOXX____',
+  crossesNext: 'OX_______',
+  noughtsNext: 'X________',
+  crossesWin: 'XXXOXOO__',
+  noughtsWin: 'XXOXOXO__',
+  draw: 'XOXXXOOXO',
+  freshGame: '_________',
+  realGame1: '________X',
+  realGame2: 'O_______X',
+  realGame3: 'O____X__X',
+  realGame4: 'O_O__X__X',
+  realGame5: 'OXO__X__X',
+  realGame6: 'OXO_OX__X',
+  realGame7: 'OXO_OX_XX',
+  realGame8: 'OXO_OXOXX'
+};
 
-  let timeoutSpy: jest.SpyInstance;
-
-  // Act before assertions
-  beforeAll(async () => {
-    // Read more about fake timers
-    // http://facebook.github.io/jest/docs/en/timer-mocks.html#content
-    // Jest 27 now uses "modern" implementation of fake timers
-    // https://jestjs.io/blog/2021/05/25/jest-27#flipping-defaults
-    // https://github.com/facebook/jest/pull/5171
-    jest.useFakeTimers();
-    timeoutSpy = jest.spyOn(global, 'setTimeout');
-
-    const p: Promise<string> = greeter(name);
-    jest.runOnlyPendingTimers();
-    hello = await p;
+// Black-box testing or I/O testing. I am not interested in 'how' the code works, just that it gives me the result I want
+describe('getStateofBoard()', () => {
+  it('invalid when passed blank', () => {
+    expect(getStateOfBoard(boards.blank)).toBe(BoardState.INVALID_GAME);
   });
-
-  // Teardown (cleanup) after assertions
-  afterAll(() => {
-    timeoutSpy.mockRestore();
+  it('invalid when passed badly formatted data', () => {
+    expect(getStateOfBoard(boards.badFormat)).toBe(BoardState.INVALID_GAME);
   });
-
-  // Assert if setTimeout was called properly
-  it('delays the greeting by 2 seconds', () => {
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    expect(setTimeout).toHaveBeenLastCalledWith(
-      expect.any(Function),
-      Delays.Long,
-    );
+  it('invalid board is too short', () => {
+    expect(getStateOfBoard(boards.tooShort)).toBe(BoardState.INVALID_GAME);
   });
-
-  // Assert greeter result
-  it('greets a user with `Hello, {name}` message', () => {
-    expect(hello).toBe(`Hello, ${name}`);
+  it('invalid board is too long', () => {
+    expect(getStateOfBoard(boards.tooLong)).toBe(BoardState.INVALID_GAME);
+  });
+  it('broken the rules if noughts go first', () => {
+    expect(getStateOfBoard(boards.noughtsFirst)).toBe(BoardState.BROKEN_RULES);
+  });
+  it('crosses next turn', () => {
+    expect(getStateOfBoard(boards.crossesNext)).toBe(BoardState.CROSSES_TURN);
+  });
+  it('noughts next turn', () => {
+    expect(getStateOfBoard(boards.noughtsNext)).toBe(BoardState.NOUGHTS_TURN);
+  });
+  it('crosses win', () => {
+    expect(getStateOfBoard(boards.crossesWin)).toBe(BoardState.CROSSES_WIN);
+  });
+  it('noughts win', () => {
+    expect(getStateOfBoard(boards.noughtsWin)).toBe(BoardState.NOUGHTS_WIN);
+  });
+  it('draw if no winner', () => {
+    expect(getStateOfBoard(boards.draw)).toBe(BoardState.DRAW);
+  });
+  it('fresh game, no turns taken yet', () => {
+    expect(getStateOfBoard(boards.freshGame)).toBe(BoardState.CROSSES_TURN);
+  });
+  it('real incremental game turn 1, X has taken first turn', () => {
+    expect(getStateOfBoard(boards.realGame1)).toBe(BoardState.NOUGHTS_TURN);
+  });
+  it('real incremental game turn 2, O has taken a turn', () => {
+    expect(getStateOfBoard(boards.realGame2)).toBe(BoardState.CROSSES_TURN);
+  });
+  it('real incremental game turn 3, X has taken a turn', () => {
+    expect(getStateOfBoard(boards.realGame3)).toBe(BoardState.NOUGHTS_TURN);
+  });
+  it('real incremental game turn 4, O has taken a turn', () => {
+    expect(getStateOfBoard(boards.realGame4)).toBe(BoardState.CROSSES_TURN);
+  });
+  it('real incremental game turn 5, X has taken a turn', () => {
+    expect(getStateOfBoard(boards.realGame5)).toBe(BoardState.NOUGHTS_TURN);
+  });
+  it('real incremental game turn 6, O has taken a turn', () => {
+    expect(getStateOfBoard(boards.realGame6)).toBe(BoardState.CROSSES_TURN);
+  });
+  it('real incremental game turn 7, X has taken a turn', () => {
+    expect(getStateOfBoard(boards.realGame7)).toBe(BoardState.NOUGHTS_TURN);
+  });
+  it('real incremental game turn 8, O wins', () => {
+    expect(getStateOfBoard(boards.realGame8)).toBe(BoardState.NOUGHTS_WIN);
   });
 });

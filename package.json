@@ -1,7 +1,7 @@
 {
-  "name": "node-typescript-boilerplate",
-  "version": "0.0.0",
-  "description": "Minimalistic boilerplate to quick-start Node.js development in TypeScript.",
+  "name": "node-noughts-crosses",
+  "version": "0.0.1",
+  "description": "Noughts and Crosses written in Node.js, TypeScript.",
   "type": "module",
   "engines": {
     "node": ">= 16.13 <17"
@@ -22,7 +22,7 @@
     "typescript": "~4.7"
   },
   "scripts": {
-    "start": "node build/src/main.js",
+    "start": "node build/src/main.js null poop xxx oxoxxo__o xxxooox_x XXXOO____ XX_OOOX__ X_OOO_XXX XXXOXOXOO XOOOXXXXO XOXOOXXO_ XOXOXOOX_",
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
     "build": "tsc -p tsconfig.json",
@@ -33,7 +33,7 @@
     "prettier": "prettier --config .prettierrc --write .",
     "test:watch": "jest --watch"
   },
-  "author": "Jakub Synowiec <jsynowiec@users.noreply.github.com>",
+  "author": "Patrick Fawbert Mills",
   "license": "Apache-2.0",
   "dependencies": {
     "tslib": "~2.4"
