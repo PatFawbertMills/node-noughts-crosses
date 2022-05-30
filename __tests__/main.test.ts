@@ -7,6 +7,8 @@ const boards = {
   tooShort: 'XOX',
   tooLong: 'XOXOOXXOXO',
   noughtsFirst: 'OOOXX____',
+  crossesTooMany: 'XOXOXX___',
+  lowercaseOK: 'xoxxoooxx',
   crossesNext: 'OX_______',
   noughtsNext: 'X________',
   crossesWin: 'XXXOXOO__',
@@ -20,14 +22,16 @@ const boards = {
   realGame5: 'OXO__X__X',
   realGame6: 'OXO_OX__X',
   realGame7: 'OXO_OX_XX',
-  realGame8: 'OXO_OXOXX'
+  realGame8: 'OXO_OXOXX',
 };
 
+// TDD formatted test scripts
 // Black-box testing or I/O testing. I am not interested in 'how' the code works, just that it gives me the result I want
 describe('getStateofBoard()', () => {
   it('invalid when passed blank', () => {
     expect(getStateOfBoard(boards.blank)).toBe(BoardState.INVALID_GAME);
   });
+  // nice bit off TDD here because I had missed it and wasn't handling this before i wrote the test
   it('invalid when passed badly formatted data', () => {
     expect(getStateOfBoard(boards.badFormat)).toBe(BoardState.INVALID_GAME);
   });
@@ -40,6 +44,15 @@ describe('getStateofBoard()', () => {
   it('broken the rules if noughts go first', () => {
     expect(getStateOfBoard(boards.noughtsFirst)).toBe(BoardState.BROKEN_RULES);
   });
+  it('broken the rules if crosses taken extra turn', () => {
+    expect(getStateOfBoard(boards.crossesTooMany)).toBe(
+      BoardState.BROKEN_RULES,
+    );
+  });
+  it('handle lower case string', () => {
+    expect(getStateOfBoard(boards.lowercaseOK)).toBe(BoardState.DRAW);
+  });
+
   it('crosses next turn', () => {
     expect(getStateOfBoard(boards.crossesNext)).toBe(BoardState.CROSSES_TURN);
   });
