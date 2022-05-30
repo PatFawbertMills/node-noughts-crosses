@@ -30,3 +30,7 @@ node build/src/main.js XO_board
 ... and replace `XO_board` with your board. You can include as many arguements as you like, just separate them with a space.
 
 There are a selection of boards in the test file too.
+
+### Template
+
+Templated from the [node-typescript-boilerplate](https://github.com/jsynowiec/node-typescript-boilerplate)
